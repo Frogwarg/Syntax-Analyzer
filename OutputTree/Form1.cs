@@ -1,13 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.IO;
-using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
@@ -127,21 +123,6 @@ namespace OutputTree
             }
             outGrammatics();
         }
-        //public void outGrammatics()
-        //{
-        //    outTxt.Text = "Строка преобразована:\n" + expresList[counterExpr].inputString;
-        //    if (expresList[counterExpr].outputString != "")
-        //    {
-        //        outTxt.Text += Environment.NewLine + "Строка принята:\n" + expresList[counterExpr].outputString;
-        //        outTxt.Text += "\n=> " + expresList[counterExpr].exp;
-        //        DrawTree(expresList[counterExpr].tree, pictureBox1.Width / 2 + pictureBox1.Width / 4 - pictureBox1.Width / 8, 50, 50, 50, 50);
-        //    }
-        //    else
-        //    {
-        //        outTxt.Text += Environment.NewLine + "Строка не принята:";
-        //        pictureBox1.CreateGraphics();
-        //    }
-        //}
         public void outGrammatics()
         {
             outTxt.Text = "Строка преобразована:\n" + expresList[counterExpr].inputString;
@@ -164,7 +145,7 @@ namespace OutputTree
             }
             else
             {
-                outTxt.Text += Environment.NewLine + "Строка не принята:";
+                outTxt.Text += Environment.NewLine + "Строка не принята";
                 // Очищаем PictureBox
                 pictureBox1.Image = null;
             }
@@ -268,7 +249,7 @@ namespace OutputTree
 
             int radius = 20; // Это регулирует размер узлов дерева.
             Brush fillBrush = Brushes.Blue; // Кисть для внутреннего цвета
-            Pen borderPen = new Pen(Color.Red, 2); // Ручка для обводки
+            Pen borderPen = new Pen(pictureBox1.BackColor /*Color.Black*/, 2); // Ручка для обводки
 
             // Отрисовка круга для узла
             g.FillEllipse(fillBrush, x - radius, y - radius, 2 * radius, 2 * radius);

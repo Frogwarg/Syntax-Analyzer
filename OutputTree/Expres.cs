@@ -2,10 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Reflection;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace OutputTree
@@ -218,7 +215,7 @@ namespace OutputTree
                     {
                         if (term == 'a')
                         {
-                            tree.AddChild(new TreeNode<string>(leks[leksindex])); //надо убрать break снизу и запускат ьрекурсию после каждой обработки нетерминала
+                            tree.AddChild(new TreeNode<string>(leks[leksindex]));
                             leksindex++;
                         }
                         else

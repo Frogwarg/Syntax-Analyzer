@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Forms;
 
 namespace OutputTree
 {
@@ -35,34 +34,6 @@ namespace OutputTree
                 pravila += Environment.NewLine;
             }
             return (pravila);
-        }
-        public void OutputLine()
-        {
-            Stack<string> stack = new Stack<string>();
-            string copyStr = outputString;
-            int counter = 0;
-            //int reserveCouner = 0;
-            //string reserveStr = "";
-            stack.Push("S");
-            while (true){
-                if (rules.Keys.Contains(stack.Peek()))
-                {
-
-                    stack.Pop();
-                }
-                else
-                {
-                    if (stack.Peek() == copyStr[counter].ToString())
-                    {
-                        stack.Pop();
-                        copyStr = copyStr.Remove(0, 1);
-                    }
-                }
-                if (copyStr.Length == 0 || stack.Count == 0)
-                {
-                    break;
-                }
-            }
         }
         public string outString(ref TreeNode<string> tree, ref List<string> addings)
         {
@@ -118,7 +89,7 @@ namespace OutputTree
                         justJumped = true;
                         int back = getBack?2:1;
                         int reserved = FindBackPointsMax(steps)-back;
-                        if (reserved >=0)
+                        if (reserved >=3)
                         {
                             Step res= steps[reserved];
                             step = res.step;
@@ -136,13 +107,10 @@ namespace OutputTree
                             foreach (var key in keysToRemove)
                             {
                                 fails[fails.Count - 1].Add(steps[key]);
-                                //steps.Add(jumps*1000 + key, steps[key]);
                                 steps.Remove(key);
                             } 
                             stars = res.stars;
                             usedProductions = res.usedProductions;
-                            //if (Term.Contains(stack.Peek()))
-                            //    continue;
                             if (neTerm.Contains(stack.Peek()) && usedProductions[stack.Peek()].Count== rules[stack.Peek()].Count)
                             {
                                 getBack = true;
@@ -179,7 +147,6 @@ namespace OutputTree
                         {
                             result += steping.step;
                         }
-                        //MessageBox.Show(result);
                         stars += "*";
                         steps[step].backPoints += stars;
                         string current= copyStr[index].ToString();
@@ -206,8 +173,7 @@ namespace OutputTree
                                         continue;
                                     }
                                 }
-                            }
-                            
+                            } 
                         }
                         else
                         {
@@ -276,8 +242,8 @@ namespace OutputTree
                     }
                     int k = inStr.IndexOf(poped);
                     if (k != -1)
-                        inStr = inStr.Substring(0, k) + production + inStr.Substring(k + 1);
-                    addings.Add(production);
+                        inStr = inStr.Substring(0, k) + production + inStr.Substring(k + 1); //добавляшка
+                    addings.Add(production); //заменяемое правило
                     resultStr += "=>" + inStr; //формируем строку вывода
                 }
             }
