@@ -90,7 +90,7 @@ namespace OutputTree
             while (stack.Count > 0 || index < copyStr.Length)
             {
                 step++;
-                steps.Add(step, new Step(step,CloneStack<string>(stack),index,resultStr,"",inStr,stars,usedProductions,addings)); /*шаги можно не удалять,
+                steps.Add(step, new Step(step,CloneStack<string>(stack),index,resultStr,"",inStr,stars,CopyDictionary( usedProductions),addings)); /*шаги можно не удалять,
                                                                                                                            а при возврате на контр. точку
                                                                                                                            увеличивать значение шага на, 
                 допустим (количество откатов)*1000. Количество откатов нужно отслеживать глобально в методе и хранить в переменной (jumps), наверное. При выборе одного из правил
@@ -106,15 +106,6 @@ namespace OutputTree
                     if (!getBack && (stack.Peek() == copyStr.Substring(index, stack.Peek().Length)))
                     {
                         index += stack.Peek().Length;
-                        //if (stack.Peek() == "a")
-                        //{
-                        //    tree.AddChild(new TreeNode<string>(leks[leksCounter]));
-                        //    leksCounter++;
-                        //}
-                        //else
-                        //{
-                        //    tree.AddChild(new TreeNode<string>(stack.Peek()));
-                        //}
                         stack.Pop();
                         foreach (var pair in usedProductions)
                         {
@@ -126,7 +117,7 @@ namespace OutputTree
                         jumps++;
                         justJumped = true;
                         int back = getBack?2:1;
-                        int reserved = FindBackPoints(steps)-back;
+                        int reserved = FindBackPointsMax(steps)-back;
                         if (reserved >=0)
                         {
                             Step res= steps[reserved];
@@ -178,6 +169,7 @@ namespace OutputTree
                     if (productions.Count == 1)
                     {
                         production = productions[0];
+                        usedProductions[stack.Peek()].Add(rules[stack.Peek()].IndexOf(production));
                     }
                     else
                     {
@@ -227,6 +219,7 @@ namespace OutputTree
                             if (stack.Peek()=="E" && current == "(")
                             {
                                 production = rules[stack.Peek()][0];
+                                usedProductions[stack.Peek()].Add(rules[stack.Peek()].IndexOf(production));
                             }
                             else
                             {
@@ -243,7 +236,10 @@ namespace OutputTree
                                         }
                                     }
                                 }
-
+                                else
+                                {
+                                    usedProductions[stack.Peek()].Add(rules[stack.Peek()].IndexOf(production));
+                                }
                             }
                         }
                     }
@@ -257,13 +253,13 @@ namespace OutputTree
                         }
                         continue;
                     }
-                    else
-                    {
-                        if (production == "a")
-                        {
-                            usedProductions[stack.Peek()].Add(rules[stack.Peek()].IndexOf(production));
-                        }
-                    }
+                    //else
+                    //{
+                    //    if (production == "a")
+                    //    {
+                    //        usedProductions[stack.Peek()].Add(rules[stack.Peek()].IndexOf(production));
+                    //    }
+                    //}
                     string poped=stack.Pop();
                     justJumped = false;
                     for (int i = production.Length - 1; i >= 0; i--) // добавляем символы правила в стек в обратном порядке
@@ -302,7 +298,22 @@ namespace OutputTree
             }
             return result;
         }
-        int FindBackPoints(Dictionary<int, Step> steps)
+        int FindBackPointsMin(Dictionary<int, Step> steps)
+        {
+            int minAsterisks = int.MaxValue;
+            int maxKey = -1;
+            foreach (var kvp in steps)
+            {
+                int asterisksCount = CountAsterisks(kvp.Value.backPoints);
+                if (asterisksCount < minAsterisks)
+                {
+                    minAsterisks = asterisksCount;
+                    maxKey = kvp.Key;
+                }
+            }
+            return maxKey;
+        }
+        int FindBackPointsMax(Dictionary<int, Step> steps)
         {
             int maxAsterisks = -1;
             int maxKey = -1;
@@ -341,6 +352,13 @@ namespace OutputTree
             }
 
             return newStack;
+        }
+        static Dictionary<string, List<int>> CopyDictionary(Dictionary<string, List<int>> original)
+        {
+            return original.ToDictionary(
+                kvp => kvp.Key,
+                kvp => kvp.Value.ToList()
+            );
         }
         string outStack(Stack<string> stack)
         {

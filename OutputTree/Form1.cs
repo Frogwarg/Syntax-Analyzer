@@ -160,6 +160,7 @@ namespace OutputTree
                 }
                 // Устанавливаем Bitmap в качестве изображения PictureBox
                 pictureBox1.Image = bmp;
+                outTxt.Text +="\nПроверка:\n"+ expresList[counterExpr].tree.LeftmostLeafTraversal();
             }
             else
             {

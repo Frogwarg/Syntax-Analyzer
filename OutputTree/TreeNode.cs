@@ -69,6 +69,32 @@ namespace OutputTree
 
             return null;
         }
+        public string LeftmostLeafTraversal()
+        {
+            StringBuilder result = new StringBuilder();
+
+            LeftmostLeafTraversal(this, result);
+
+            return result.ToString();
+        }
+
+        private void LeftmostLeafTraversal(TreeNode<T> node, StringBuilder result)
+        {
+            if (node == null)
+                return;
+
+            if (node.Children.Count == 0)
+            {
+                result.Append(node.Data.ToString()).Append(" "); // Сохраняем лист в строку
+            }
+            else
+            {
+                foreach (var child in node.Children)
+                {
+                    LeftmostLeafTraversal(child, result);
+                }
+            }
+        }
 
         public IEnumerator<TreeNode<T>> GetEnumerator()
         {
